@@ -1,2 +1,2 @@
-sarvami
+sarvamai
 streamlit
