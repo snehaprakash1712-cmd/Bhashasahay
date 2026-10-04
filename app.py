@@ -121,8 +121,8 @@ if audio:
 
     with open(audio_path, "rb") as audio_file:
 
-        stt_response = client.speech_to_text.transcribe(
-            file=audio_file,
+         stt_response = client.speech_to_text.transcribe(
+        file=("audio.wav", audio_file, "audio/wav"),
             model="saaras:v4",
             language_code=language_code,
             mode="transcribe"
@@ -136,18 +136,15 @@ if audio:
 # -----------------------------
 # User question
 # -----------------------------
-if voice_question:
-    question = voice_question
-    st.info("Using your voice question above.")
-else:
-    st.markdown("### 💬 Ask BhashaSahay")
+question = voice_question
 
-question = st.text_area(
-    "Your question",
-    placeholder="Type your question here...",
-    height=100,
-    label_visibility="collapsed"
-)
+if not question:
+    st.markdown("### 💬 Ask BhashaSahay")
+    question = st.text_area(
+        "What do you need help with?",
+        placeholder="Type your question here..."
+    )
+
 
 # -----------------------------
 # Ask AI button
