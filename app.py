@@ -1,17 +1,24 @@
 import os
 import streamlit as st
-from sarvamai import SarvamAI
 import tempfile
+from pypdf import PdfReader
+from sarvamai import SarvamAI
 from sarvamai.play import save
+
+st.set_page_config(
+    page_title="BhashaSahay",
+    page_icon="🇮🇳",
+    layout="centered"
+)
 # -----------------------------
 # Conversation memory
 # -----------------------------
 if "messages" not in st.session_state:
-    st.session_state.messages = [] 
-    
-    if st.button("🧹 Clear Conversation"):
-       st.session_state.messages = []
-       st.rerun()
+    st.session_state.messages = []
+
+if st.button("🧹 Clear Conversation"):
+    st.session_state.messages = []
+    st.rerun()
 # -----------------------------
 # Display conversation history
 # -----------------------------
@@ -99,6 +106,40 @@ language_codes = {
 language_code = language_codes[language]
 
 # -----------------------------
+# 📄 Document Understanding
+# -----------------------------
+st.markdown("### 📄 Understand Your Documents")
+st.caption("Upload your study notes or a PDF and ask questions in your preferred language.")
+
+uploaded_pdf = st.file_uploader(
+    "Upload a PDF document",
+    type=["pdf"],
+    key="document_uploader"
+)
+
+document_text = ""
+
+if uploaded_pdf is not None:
+    try:
+        pdf_reader = PdfReader(uploaded_pdf)
+
+        document_text = "\n".join(
+            page.extract_text() or ""
+            for page in pdf_reader.pages
+        )
+
+        if document_text.strip():
+            st.success("PDF uploaded and read successfully!")
+            with st.expander("Preview document text"):
+                st.write(document_text[:3000])
+        else:
+            st.warning(
+                "No readable text found. This PDF may contain scanned images."
+            )
+
+    except Exception as error:
+        st.error(f"Could not read the PDF: {error}")
+# -----------------------------
 # Voice input
 # -----------------------------
 st.markdown("### 🎤 Ask using your voice")
@@ -171,6 +212,16 @@ You are BhashaSahay, an AI assistant designed to help
 people access information easily in Indian languages.
 
 The user's preferred language is {language}.
+If the user uploads a PDF, use the following document
+content to answer their questions:
+
+{document_text[:15000]}
+
+If document content is available, answer questions
+using that content. If the answer is not present in
+the document, clearly say so instead of inventing facts.
+
+If no PDF is uploaded, answer general questions normally.
 
 Answer the user's questions in {language}.
 
