@@ -13,6 +13,91 @@ st.set_page_config(
     page_icon="🇮🇳",
     layout="centered"
 )
+st.markdown("""
+<style>
+/* Main page */
+.stApp {
+    background: linear-gradient(135deg, #f5f7ff 0%, #f7fbff 55%, #f2fbf8 100%);
+}
+
+.block-container {
+    max-width: 1000px;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+}
+
+/* Headings */
+h1 {
+    color: #26356b !important;
+    font-weight: 800 !important;
+    letter-spacing: -1px;
+}
+
+h2, h3 {
+    color: #344477 !important;
+    font-weight: 700 !important;
+}
+
+/* Buttons */
+.stButton > button {
+    background: linear-gradient(90deg, #4f46e5, #6366f1);
+    color: white !important;
+    border: none;
+    border-radius: 12px;
+    padding: 0.55rem 1.1rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.stButton > button:hover {
+    background: #3730a3;
+    border: none;
+    color: white !important;
+}
+
+/* Input fields and selectors */
+div[data-baseweb="select"] > div,
+.stTextArea textarea,
+.stTextInput input {
+    border-radius: 10px;
+}
+
+/* Subtle separation between sections */
+div[data-testid="stFileUploader"],
+div[data-testid="stAudioInput"] {
+    border-radius: 12px;
+}
+
+/* Keep content readable */
+p, label {
+    line-height: 1.6;
+}
+/* Lighter, cleaner input fields */
+div[data-baseweb="select"] > div {
+    background-color: #ffffff !important;
+    color: #26356b !important;
+    border: 1px solid #d8def0 !important;
+}
+
+div[data-baseweb="select"] * {
+    color: #26356b !important;
+}
+
+.stTextArea textarea,
+.stTextInput input {
+    background-color: #ffffff !important;
+    color: #26356b !important;
+    border: 1px solid #d8def0 !important;
+}
+
+div[data-testid="stFileUploader"] {
+    background: #ffffff;
+    border: 1px solid #e0e6f5;
+    border-radius: 14px;
+    padding: 12px;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # -----------------------------
 # Conversation memory
@@ -50,6 +135,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+st.info(
+    "👋 Namaste! Ask questions in your preferred Indian language, "
+    "translate text, study from PDF notes, or speak naturally using your voice."
+)
 # -----------------------------
 # Choose mode
 # -----------------------------
