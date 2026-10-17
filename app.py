@@ -3,6 +3,7 @@ import streamlit as st
 import tempfile
 from pypdf import PdfReader
 from sarvamai import SarvamAI
+import tempfile
 from sarvamai.play import save
 
 st.set_page_config(
@@ -38,14 +39,6 @@ with chat_container:
             with st.chat_message("assistant"):
                 st.write(message["content"])
 
-# -----------------------------
-# Page configuration
-# -----------------------------
-st.set_page_config(
-    page_title="BhashaSahay",
-    page_icon="🇮🇳",
-    layout="centered"
-)
 
 # -----------------------------
 # Sarvam AI setup
@@ -74,7 +67,20 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+# -----------------------------
+# Choose BhashaSahay Mode
+# -----------------------------
+st.markdown("### ✨ Choose your mode")
 
+mode = st.selectbox(
+    "What would you like to do?",
+    [
+        "Normal Chat",
+        "Translation",
+        "Study Assistant"
+    ],
+    key="assistant_mode"
+)
 # -----------------------------
 # Language selection
 # ----------------------------- 
