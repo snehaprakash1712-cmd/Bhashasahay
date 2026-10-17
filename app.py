@@ -1,6 +1,8 @@
 import os
+import json
 import tempfile
 import streamlit as st
+from datetime import datetime
 from pypdf import PdfReader
 from sarvamai import SarvamAI
 from sarvamai.play import save
@@ -102,13 +104,37 @@ div[data-testid="stFileUploader"] {
 # -----------------------------
 # Conversation memory
 # -----------------------------
+HISTORY_FILE = "conversation_history.json"
+
+
+def load_conversation_history():
+    if not os.path.exists(HISTORY_FILE):
+        return []
+
+    try:
+        with open(HISTORY_FILE, "r", encoding="utf-8") as file:
+            history = json.load(file)
+            return history if isinstance(history, list) else []
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def save_conversation_history(history):
+    try:
+        with open(HISTORY_FILE, "w", encoding="utf-8") as file:
+            json.dump(history, file, ensure_ascii=False, indent=2)
+    except OSError as error:
+        st.warning(f"Could not save conversation history: {error}")
+
+
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = load_conversation_history()
+
 
 if st.button("🧹 Clear Conversation"):
     st.session_state.messages = []
+    save_conversation_history([])
     st.rerun()
-
 # -----------------------------
 # Sarvam AI setup
 # -----------------------------
@@ -296,6 +322,7 @@ if st.button("🤖 Ask BhashaSahay"):
             "role": "user",
             "content": question.strip()
         })
+        save_conversation_history(st.session_state.messages)
 
         # Base instructions
         system_prompt = f"""
@@ -368,6 +395,7 @@ When appropriate, help with revision and practice questions.
                     "role": "assistant",
                     "content": answer
                 })
+                save_conversation_history(st.session_state.messages)
 
                 with st.chat_message("assistant", avatar="🇮🇳"):
                     st.markdown("### 🇮🇳 BhashaSahay")
